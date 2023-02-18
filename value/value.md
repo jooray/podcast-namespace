@@ -160,7 +160,7 @@ There is no limit on how many `valueRecipient` elements can be present in a give
  - `type` (required) A slug that represents the type of receiving address that will receive the payment.
  - `address` (required) This denotes the receiving address of the payee.
  - `split` (required) The number of shares of the payment this recipient will receive.
- - `fee` (optional) If this attribute is not specified, it is assumed to be false.
+ - `fee` (optional) Is this a fee for using some service (true), or a standard split (false, default).
 
 <br>
 
@@ -182,7 +182,7 @@ When a single `<podcast:valueRecipient>` is present, it should be assumed that t
 be ignored.  When multiple recipients are present, a share calculation (see below) should be made to determine how much to send to each recipient's address.
 
 The `fee` attribute tells apps whether this split should be treated as a "fee", or a normal split.  If this attribute is true, then this split should be calculated
-as a fee, meaning its percentage (as calculated from the shares) should be taken off the top of the entire transaction amount.  This is the preferred way for service
+as a fee, meaning the percentage points should be taken off the top of the entire transaction amount.  This is the preferred way for service
 providers such as apps, hosting companies, API's and third-party value add providers to add their fee to a value block.
 
 #### Custom Key/Value Pairs
@@ -320,7 +320,11 @@ If the receiving Lightning node, or service, requires application specific data 
 
 This is a live, working example of a Lightning keysend value block in production.  It designates four recipients for payment - two
 podcast hosts at 49 and 46 shares respectively, a producer working on per episode chapter creation who gets a 5 share, and
-a single share (effectively 1%) fee to the Podcastindex.org API.
+a 1% fee to the Podcastindex.org API.
+
+If there is a boost of 300 sats, a 1% fee (3 sats) is taken first and sent to the Podcastindex.org API as a fee for the service.
+Then 297 sats are split 49%, 46% and 5%, since the sum is 100.
+
 Since the value block is defined at the `<channel>` level, it applies to every podcast episode.
 
 ```xml
